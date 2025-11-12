@@ -1,0 +1,116 @@
+/* Paleta de Cores Pastéis e Alice */
+:root {
+    --pastel-pink: #FFD1DC;  /* Rosa muito suave */
+    --light-rose: #FADADD;   /* Rosa claro */
+    --sky-light: #B0E0E6;    /* Azul céu claro */
+    --cloud-white: #F0FFFF;  /* Branco quase perolado (nuvens) */
+    --text-color-blue: #6495ED; /* Azul Pastel (Cornflower Blue) para o texto */
+    
+    /* Cores dos Naipes */
+    --suit-red: #DC143C;     /* Carmesim para Copas e Ouros */
+    --suit-black: #333333;   /* Preto escuro para Paus e Espadas */
+}
+
+/* Base e Fundo (Degradê de Céu) */
+body {
+    margin: 0;
+    /* Aplica a fonte de conto de fadas */
+    font-family: 'Great Vibes', cursive, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+    /* Degradê no Fundo (Céu e Nuvens Suaves) */
+    background: linear-gradient(135deg, var(--sky-light) 0%, var(--light-rose) 50%, var(--cloud-white) 100%);
+}
+
+/* Contêiner da Tela (Screen) */
+.screen {
+    width: 90vw;
+    height: 120px;
+    
+    border: 5px solid var(--pastel-pink); 
+    border-radius: 15px; 
+    background-color: var(--cloud-white); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    overflow: hidden; 
+    position: relative; 
+}
+
+/* Estilo do Letreiro */
+.marquee-text {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+
+    padding: 20px;
+    font-size: 52px; 
+    font-weight: 400; 
+    color: var(--text-color-blue); 
+    /* Sombra suave e mágica no texto */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1), -1px -1px 3px rgba(255, 255, 255, 0.8);
+
+    white-space: nowrap; 
+    position: absolute;
+    left: 0; 
+    top: 50%; 
+    transform: translateY(-50%); 
+}
+
+
+/* ✨ Detalhes Alice: Quatro Naipes de Cartas */
+
+/* Naipes Superiores: Copas (♥) e Ouros (♦) - Canto superior esquerdo */
+.screen::before {
+    content: "♥ ♦";
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 28px;
+    color: var(--suit-red); /* Vermelho */
+    letter-spacing: 10px; 
+    z-index: 10; 
+    animation: pulse 4s infinite alternate;
+}
+
+/* Naipes Superiores: Paus (♣) e Espadas (♠) - Canto superior direito */
+.screen::after {
+    content: "♣ ♠"; 
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 28px;
+    color: var(--suit-black); /* Preto */
+    letter-spacing: 10px; 
+    z-index: 10;
+    animation: pulse 4s infinite alternate 0.5s; 
+}
+
+/* Naipe de Ouros (♦) - Inferior Esquerdo (junto ao texto) */
+.screen .marquee-text::before {
+    content: "♦";
+    position: absolute;
+    bottom: -15px;
+    left: 5px;
+    font-size: 20px;
+    color: var(--suit-red);
+    opacity: 0.7;
+}
+
+/* Naipe de Paus (♣) - Inferior Direito (junto ao texto) */
+.screen .marquee-text::after {
+    content: "♣";
+    position: absolute;
+    bottom: -15px;
+    right: 5px;
+    font-size: 20px;
+    color: var(--suit-black);
+    opacity: 0.7;
+}
+
+/* Animação de pulsação (ajuste de opacidade) */
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
