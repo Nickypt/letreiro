@@ -22,6 +22,31 @@ body {
     overflow: hidden;
 }
 
+/* 💫 Rastro do Cursor (Brilhos) */
+
+#cursor-trail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Crucial para não interferir na interação */
+    z-index: 20; /* Garantir que fique acima de tudo */
+}
+
+.sparkle {
+    position: absolute;
+    width: 8px; /* Tamanho da partícula */
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--pastel-pink); 
+    box-shadow: 0 0 5px var(--cloud-white), 0 0 10px var(--pastel-pink); /* Efeito de brilho */
+    opacity: 0;
+    
+    /* Animação de desvanecimento */
+    transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
 /* 🌟 Efeito de Partículas Mágicas (Estrelinhas) */
 .magic-particles {
     position: fixed;
@@ -48,7 +73,7 @@ body {
     100% { background-position: 1000px 1000px; }
 }
 
-/* 🖼️ Estilo e Animação da Alice no Fundo (Ajustado e Visível) */
+/* 🖼️ Estilo e Animação da Alice (Ajustada, Flutuação Suave) */
 .background-alice {
     position: fixed; 
     bottom: 0;
@@ -56,8 +81,7 @@ body {
     width: 100vw; 
     height: 80vh; 
     overflow: hidden;
-    /* NOVO: Z-index maior que o letreiro (.screen é 10) */
-    z-index: 12; 
+    z-index: 12; /* Por cima do letreiro */
     pointer-events: none;
 }
 
@@ -67,8 +91,8 @@ body {
     bottom: 0; 
     right: 5vw; 
     
-    /* NOVO: Opacidade total (100%) */
-    opacity: 1; 
+    /* Opacidade bem sutil (95% visível) */
+    opacity: 0.95; 
     
     animation: gentle-float 15s ease-in-out infinite alternate;
 }
@@ -78,19 +102,22 @@ body {
         transform: translateY(0) rotate(-0.5deg);
     }
     100% {
-        transform: translateY(-20px) rotate(0.5deg);
+        /* Flutuação vertical de 15px */
+        transform: translateY(-15px) rotate(0.5deg); 
     }
 }
 
-/* 🐈 Gato de Cheshire (Deitado no topo do Letreiro) */
+/* 🐈 Gato de Cheshire (Aumentado Sutilmente) */
 #cheshireCat {
     position: fixed;
-    top: calc(50vh - 150px); 
+    /* Posição ajustada */
+    top: calc(50vh - 165px); 
     left: calc(50vw - 45vw + 10px); 
-    width: 150px; 
+    
+    /* Tamanho ligeiramente maior */
+    width: 170px; 
     height: auto;
     
-    /* Z-index muito alto para garantir que esteja acima de tudo */
     z-index: 15; 
     
     transform: rotate(-10deg); 
@@ -129,7 +156,7 @@ body {
         0 0 10px rgba(0, 0, 0, 0.15);
     overflow: hidden; 
     position: relative; 
-    z-index: 10; /* Fica AGORA atrás da Alice e do Gato */
+    z-index: 10; 
 }
 
 /* Estilo do Letreiro */
@@ -172,6 +199,10 @@ body {
     margin-right: 0.1em;
     display: inline-block;
     position: relative; 
+    cursor: pointer;
+    
+    /* Transição suave para o efeito de hover */
+    transition: color 0.5s ease-in-out, text-shadow 0.5s ease-in-out;
     
     animation-name: wave-text;
     animation-duration: 6s;
@@ -179,7 +210,15 @@ body {
     animation-timing-function: ease-in-out;
 }
 
-/* ✨ Detalhes Alice: Quatro Naipes de Cartas (Mantido) */
+/* Efeito de Mudança de Cor ao Passar o Mouse/Dedo (Tons Pastéis) */
+.marquee-text span:hover {
+    color: var(--pastel-pink); 
+    text-shadow: 
+        0 0 10px var(--cloud-white), 
+        0 0 20px var(--pastel-pink);
+}
+
+/* ✨ Detalhes Alice: Quatro Naipes de Cartas */
 @keyframes pulse {
     0% { 
         opacity: 0.8; 

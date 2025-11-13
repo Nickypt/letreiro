@@ -1,28 +1,24 @@
 // Obtém os elementos principais
 const marqueeText = document.getElementById('marqueeText');
 const screen = document.querySelector('.screen');
-// Obtém o texto da citação a partir do atributo data-text do HTML
 const textContent = marqueeText.getAttribute('data-text'); 
 
-// Parâmetros da Animação
-const baseSpeed = 1.5; 
-const speedVariation = 0.5; // Para o movimento ser mais "orgânico"
+// Parâmetros da Animação do Letreiro
+const baseSpeed = 0.6; // Movimento lento e suave
+const speedVariation = 0.5;
 let position = 0; 
-let direction = 1; // 1 = Direita, -1 = Esquerda
+let direction = 1;
 
 // 1. Inicializa o Efeito de Onda (Quebra a frase em spans)
 function initializeTextWave() {
     let htmlContent = '';
     let delay = 0;
     
-    // Itera sobre cada caractere
     textContent.split('').forEach(char => {
-        // Usa um span para cada caractere
         const content = char === ' ' ? '&nbsp;' : char;
-        // Adiciona um delay diferente para cada letra (cria o efeito de onda)
         htmlContent += `<span style="animation-delay: ${delay}s">${content}</span>`;
         
-        delay += 0.05; // Incrementa o delay para a próxima letra
+        delay += 0.05;
     });
 
     marqueeText.innerHTML = htmlContent;
@@ -34,32 +30,73 @@ function animateMarquee() {
     const textWidth = marqueeText.clientWidth;
     const maxPosition = screenWidth - textWidth; 
 
-    // Calcula a velocidade variável usando uma função seno (movimento menos robótico)
     const variableSpeed = baseSpeed + (Math.sin(Date.now() / 1000) * speedVariation);
     
-    // 1. Move o texto
     position += variableSpeed * direction;
 
-    // 2. Lógica de ida e volta (reversão)
-    if (direction === 1) { // Movendo para a direita
+    if (direction === 1) { 
         if (position >= maxPosition) {
             position = maxPosition; 
-            direction = -1; // Inverte para a esquerda
+            direction = -1;
         }
-    } else { // Movendo para a esquerda
+    } else {
         if (position <= 0) {
             position = 0; 
-            direction = 1; // Inverte para a direita
+            direction = 1;
         }
     }
 
-    // 3. Aplica a nova posição ao elemento
     marqueeText.style.left = `${position}px`;
-
-    // 4. Agenda o próximo frame
     requestAnimationFrame(animateMarquee);
 }
 
-// Inicia as funções ao carregar o script
+// ----------------------------------------------------
+// Lógica do Rastro Mágico do Cursor
+// ----------------------------------------------------
+
+const cursorTrail = document.getElementById('cursor-trail');
+const maxParticles = 30; // Limite de partículas
+let particles = [];
+
+// Função que cria e anima uma nova partícula
+function createSparkle(x, y) {
+    const sparkle = document.createElement('div');
+    sparkle.classList.add('sparkle');
+    
+    sparkle.style.left = `${x}px`;
+    sparkle.style.top = `${y}px`;
+    
+    cursorTrail.appendChild(sparkle);
+    particles.push(sparkle);
+
+    // Anima a partícula
+    setTimeout(() => {
+        const endX = x + (Math.random() - 0.5) * 50; 
+        const endY = y + (Math.random() - 0.5) * 50;
+        
+        sparkle.style.transform = `translate(${endX - x}px, ${endY - y}px)`;
+        sparkle.style.opacity = 0;
+        
+    }, 10);
+
+    // Remove a partícula após 1 segundo (tempo da transição CSS)
+    setTimeout(() => {
+        if (sparkle.parentNode) {
+            sparkle.parentNode.removeChild(sparkle);
+            particles = particles.filter(p => p !== sparkle);
+        }
+    }, 1000); 
+}
+
+// Ouve o movimento do mouse
+document.addEventListener('mousemove', (e) => {
+    if (particles.length < maxParticles) {
+        // Cria a partícula na posição atual do cursor
+        createSparkle(e.clientX, e.clientY);
+    }
+});
+
+
+// Inicia as funções principais ao carregar o script
 initializeTextWave();
-animateMarquee(); 
+animateMarquee();
