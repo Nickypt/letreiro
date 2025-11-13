@@ -62,4 +62,4 @@ function animateMarquee() {
 
 // Inicia as funções ao carregar o script
 initializeTextWave();
-animateMarquee();
+animateMarquee(); 
