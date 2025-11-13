@@ -52,25 +52,25 @@ body {
     100% { background-position: 1000px 1000px; }
 }
 
-/* 🖼️ Estilo e Animação da Alice no Fundo (Fixo no Body) */
+/* 🖼️ Estilo e Animação da Alice no Fundo (CORRIGIDO) */
 .background-alice {
-    /* Define o contêiner fixo no canto inferior direito */
+    /* Define o contêiner fixo para ocupar toda a largura de baixo */
     position: fixed; 
-    bottom: 0;
-    right: 0;
-    width: 50vw; 
-    height: 100vh; 
+    bottom: 0; /* ✅ Colocado na parte de baixo da tela */
+    left: 0;
+    width: 100vw; 
+    height: 50vh; /* Reduzido para focar na parte inferior */
     overflow: hidden;
-    z-index: 1; /* Fica atrás do letreiro */
-    opacity: 0.35; /* Suavidade */
+    z-index: 1; 
+    opacity: 0.35; 
     pointer-events: none;
 }
 
 #aliceImg {
     position: absolute;
-    height: 70vh; /* Tamanho da imagem no fundo */
+    height: 50vh; /* ✅ Tamanho Reduzido */
     bottom: 0; 
-    right: 0; 
+    right: 5vw; /* Posicionado no canto inferior direito, com margem */
     
     /* Animação de flutuação suave */
     animation: gentle-float 15s ease-in-out infinite alternate;
@@ -78,10 +78,10 @@ body {
 
 @keyframes gentle-float {
     0% {
-        transform: translateY(0) rotate(-0.5deg); /* Posição normal, rotação sutil */
+        transform: translateY(0) rotate(-0.5deg);
     }
     100% {
-        transform: translateY(-50px) rotate(0.5deg); /* Flutua 50px para cima */
+        transform: translateY(-30px) rotate(0.5deg); /* ✅ Flutuação Vertical Reduzida */
     }
 }
 
@@ -100,7 +100,7 @@ body {
         0 0 10px rgba(0, 0, 0, 0.15);
     overflow: hidden; 
     position: relative; 
-    z-index: 10; /* Fica acima da Alice e das partículas */
+    z-index: 10;
 }
 
 /* Estilo do Letreiro */
@@ -118,7 +118,12 @@ body {
         0 0 10px var(--pastel-pink), 
         1px 1px 3px rgba(0, 0, 0, 0.1); 
 
+    /* CORREÇÃO CRUCIAL PARA A FRASE: Garante que todos os spans fiquem na mesma linha */
     white-space: nowrap; 
+    /* Adiciona padding horizontal para dar espaço nas extremidades, senão o texto gruda na borda */
+    padding-left: 50px; 
+    padding-right: 50px;
+    
     position: absolute;
     left: 0; 
     top: 0; 
@@ -138,6 +143,8 @@ body {
 }
 
 .marquee-text span {
+    /* CORREÇÃO CRUCIAL: Adiciona espaço entre as palavras para evitar quebra */
+    margin-right: 0.1em; 
     display: inline-block;
     position: relative; 
     
@@ -147,8 +154,7 @@ body {
     animation-timing-function: ease-in-out;
 }
 
-/* ✨ Detalhes Alice: Quatro Naipes de Cartas */
-
+/* Detalhes dos Naipes (Mantidos do código anterior) */
 @keyframes pulse {
     0% { 
         opacity: 0.8; 
