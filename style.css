@@ -9,12 +9,12 @@
     /* Cores dos Naipes */
     --suit-red: #DC143C;     /* Carmesim para Copas e Ouros */
     --suit-black: #333333;   /* Preto escuro para Paus e Espadas */
+    --pattern-color: rgba(255, 255, 255, 0.5); /* Cor quase transparente para padrões */
 }
 
 /* Base e Fundo (Degradê de Céu) */
 body {
     margin: 0;
-    /* Aplica a fonte de conto de fadas */
     font-family: 'Great Vibes', cursive, sans-serif;
     display: flex;
     justify-content: center;
@@ -23,6 +23,33 @@ body {
     
     /* Degradê no Fundo (Céu e Nuvens Suaves) */
     background: linear-gradient(135deg, var(--sky-light) 0%, var(--light-rose) 50%, var(--cloud-white) 100%);
+    overflow: hidden; /* Evita barras de rolagem desnecessárias */
+}
+
+/* 🌟 Efeito de Partículas Mágicas (Estrelinhas) */
+.magic-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+        radial-gradient(circle at 30% 60%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+        radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+        radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+        radial-gradient(circle at 90% 40%, rgba(255, 255, 255, 0.5) 1px, transparent 0);
+    
+    background-repeat: repeat;
+    background-size: 1000px 1000px;
+    animation: move-particles 60s linear infinite;
+}
+
+@keyframes move-particles {
+    0% { background-position: 0 0; }
+    100% { background-position: 1000px 1000px; }
 }
 
 /* Contêiner da Tela (Screen) */
@@ -30,17 +57,60 @@ body {
     width: 90vw;
     height: 120px;
     
-    border: 5px solid var(--pastel-pink); 
+    border: 8px solid var(--pastel-pink); 
+    border-style: solid; 
     border-radius: 15px; 
     background-color: var(--cloud-white); 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    /* Borda com efeito inset para profundidade */
+    box-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.9) inset, 
+        0 0 10px rgba(0, 0, 0, 0.15);
     overflow: hidden; 
     position: relative; 
+    z-index: 10; /* Fica acima das partículas */
 }
+
+/* 🖼️ Estilo e Animação da Alice no Fundo */
+.background-alice {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1; /* Fica atrás do texto e naipes */
+    opacity: 0.3; /* Sutil no fundo */
+    pointer-events: none;
+}
+
+#aliceImg {
+    position: absolute;
+    height: 150%; 
+    bottom: -10%; 
+    /* Animação de flutuação suave */
+    animation: delicate-float 15s ease-in-out infinite alternate;
+}
+
+@keyframes delicate-float {
+    0% {
+        left: -10%; 
+        transform: rotate(1deg);
+    }
+    50% {
+        left: 50%; 
+        transform: rotate(-1deg);
+    }
+    100% {
+        left: 110%; 
+        transform: rotate(1deg);
+    }
+}
+
 
 /* Estilo do Letreiro */
 .marquee-text {
     display: flex;
+    /* Alinha verticalmente no centro para acomodar a onda */
     align-items: center;
     justify-content: center; 
 
@@ -48,18 +118,60 @@ body {
     font-size: 52px; 
     font-weight: 400; 
     color: var(--text-color-blue); 
-    /* Sombra suave e mágica no texto */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1), -1px -1px 3px rgba(255, 255, 255, 0.8);
+    /* Sombra de brilho mágico */
+    text-shadow: 
+        0 0 5px var(--cloud-white), 
+        0 0 10px var(--pastel-pink), 
+        1px 1px 3px rgba(0, 0, 0, 0.1); 
 
     white-space: nowrap; 
     position: absolute;
     left: 0; 
-    top: 50%; 
-    transform: translateY(-50%); 
+    top: 0; 
+    height: 100%; /* Permite o alinhamento vertical */
+    z-index: 5; /* Fica acima da Alice */
 }
 
+/* ✨ Efeito de Onda Suave no Texto */
+
+/* Animação da Onda Vertical */
+@keyframes wave-text {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px); /* Altura do pico da onda */
+    }
+}
+
+/* Aplica a animação às letras */
+.marquee-text span {
+    display: inline-block; /* Crucial para aplicar a transformação */
+    position: relative; 
+    
+    animation-name: wave-text;
+    animation-duration: 4s; /* Duração da onda completa */
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; /* Movimento suave */
+}
 
 /* ✨ Detalhes Alice: Quatro Naipes de Cartas */
+
+/* Animação de pulsação com brilho */
+@keyframes pulse {
+    0% { 
+        opacity: 0.8; 
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    50% { 
+        opacity: 1; 
+        text-shadow: 0 0 10px var(--pastel-pink); 
+    }
+    100% { 
+        opacity: 0.8; 
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+}
 
 /* Naipes Superiores: Copas (♥) e Ouros (♦) - Canto superior esquerdo */
 .screen::before {
@@ -68,7 +180,7 @@ body {
     top: 5px;
     left: 10px;
     font-size: 28px;
-    color: var(--suit-red); /* Vermelho */
+    color: var(--suit-red);
     letter-spacing: 10px; 
     z-index: 10; 
     animation: pulse 4s infinite alternate;
@@ -81,10 +193,16 @@ body {
     top: 5px;
     right: 10px;
     font-size: 28px;
-    color: var(--suit-black); /* Preto */
+    color: var(--suit-black);
     letter-spacing: 10px; 
     z-index: 10;
     animation: pulse 4s infinite alternate 0.5s; 
+}
+
+/* Naipes Inferiores - Aplica a animação para consistência */
+.screen .marquee-text::before,
+.screen .marquee-text::after {
+    animation: pulse 4s infinite alternate;
 }
 
 /* Naipe de Ouros (♦) - Inferior Esquerdo (junto ao texto) */
@@ -107,10 +225,4 @@ body {
     font-size: 20px;
     color: var(--suit-black);
     opacity: 0.7;
-}
-
-/* Animação de pulsação (ajuste de opacidade) */
-@keyframes pulse {
-    0% { opacity: 0.5; }
-    100% { opacity: 1; }
 }
