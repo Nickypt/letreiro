@@ -20,9 +20,12 @@ body {
     height: 100vh;
     background: linear-gradient(135deg, var(--sky-light) 0%, var(--light-rose) 50%, var(--cloud-white) 100%);
     overflow: hidden;
+    
+    /* ✅ NOVO CURSOR TEMÁTICO (Requer arquivo chave.png 32x32px) */
+    cursor: url('chave.png'), auto; 
 }
 
-/* 💫 Rastro do Cursor (Brilhos) */
+/* 💫 Rastro do Cursor (Brilhos Extravagantes) */
 
 #cursor-trail {
     position: fixed;
@@ -36,13 +39,21 @@ body {
 
 .sparkle {
     position: absolute;
-    width: 8px; 
-    height: 8px;
+    /* Tamanho aumentado */
+    width: 12px; 
+    height: 12px;
     border-radius: 50%;
     background-color: var(--pastel-pink); 
-    box-shadow: 0 0 5px var(--cloud-white), 0 0 10px var(--pastel-pink); 
-    opacity: 0; /* Opacidade inicial em 0 (será forçada para 1 pelo JS) */
-    transition: transform 1s ease-out, opacity 1s ease-out;
+    
+    /* Brilho aumentado drasticamente */
+    box-shadow: 
+        0 0 8px var(--cloud-white), 
+        0 0 16px var(--pastel-pink),
+        0 0 24px var(--light-rose); 
+        
+    opacity: 0; 
+    /* Duração da transição aumentada */
+    transition: transform 1.5s ease-out, opacity 1.5s ease-out; 
 }
 
 /* 🌟 Efeito de Partículas Mágicas (Estrelinhas) */
@@ -71,7 +82,7 @@ body {
     100% { background-position: 1000px 1000px; }
 }
 
-/* 🖼️ Estilo e Animação da Alice (Flutuação Suave e Sutilmente Transparente) */
+/* 🖼️ Estilo e Animação da Alice (Flutuação Suave) */
 .background-alice {
     position: fixed; 
     bottom: 0;
@@ -101,10 +112,11 @@ body {
     }
 }
 
-/* 🐈 Gato de Cheshire (Aumento e Efeito Desaparecer) */
+/* 🐈 Gato de Cheshire (Ajustado para cima e Desaparecimento) */
 #cheshireCat {
     position: fixed;
-    top: calc(50vh - 175px); 
+    /* Ajuste para cima */
+    top: calc(50vh - 185px); 
     left: calc(50vw - 45vw + 10px); 
     width: 200px; 
     height: auto;
@@ -181,7 +193,6 @@ body {
 }
 
 /* ✨ Efeito de Onda Suave no Texto */
-
 @keyframes wave-text {
     0%, 100% {
         transform: translateY(0);
@@ -197,7 +208,6 @@ body {
     position: relative; 
     cursor: pointer;
     
-    /* Inclui transição para o efeito de clique */
     transition: color 0.5s ease-in-out, text-shadow 0.5s ease-in-out, transform 0.4s ease-in-out; 
     
     animation-name: wave-text;
@@ -277,4 +287,68 @@ body {
     font-size: 20px;
     color: var(--suit-black);
     opacity: 0.7;
+}
+
+
+/* ================================================= */
+/* 📱 MEDIA QUERIES PARA RESPONSIVIDADE (MOBILE FIRST) */
+/* ================================================= */
+
+/* --- AJUSTES PARA TABLETS E TELAS MÉDIAS (MAX-WIDTH: 992px) --- */
+@media screen and (max-width: 992px) {
+    /* 📜 Letreiro */
+    .marquee-text {
+        font-size: 40px; 
+    }
+    
+    /* 🖼️ Alice */
+    #aliceImg {
+        height: 50vh; 
+        right: 0vw; 
+    }
+
+    /* 🐈 Gato */
+    #cheshireCat {
+        width: 150px; 
+        top: calc(50vh - 150px); 
+    }
+
+    /* 🖱️ Balanço do Letreiro (Mais sutil) */
+    @keyframes gentle-swing {
+        0% { transform: rotate(0.2deg); }
+        100% { transform: rotate(-0.2deg); }
+    }
+}
+
+/* --- AJUSTES PARA CELULARES (MAX-WIDTH: 600px) --- */
+@media screen and (max-width: 600px) {
+    
+    /* 📜 Letreiro */
+    .screen {
+        height: 90px;
+        width: 95vw;
+    }
+    
+    .marquee-text {
+        font-size: 30px; 
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    /* 🖼️ Alice */
+    #aliceImg {
+        height: 40vh; 
+        right: -5vw;
+    }
+
+    /* 🐈 Gato de Cheshire */
+    #cheshireCat {
+        width: 100px; 
+        top: calc(50vh - 120px); 
+    }
+    
+    /* 💫 Rastro do Cursor (Desativado em mobile para performance) */
+    #cursor-trail {
+        display: none;
+    }
 }
