@@ -18,7 +18,6 @@ function initializeTextWave() {
     // Itera sobre cada caractere
     textContent.split('').forEach(char => {
         // Usa um span para cada caractere
-        // Substitui o espaço por &nbsp; para que o span não suma
         const content = char === ' ' ? '&nbsp;' : char;
         // Adiciona um delay diferente para cada letra (cria o efeito de onda)
         htmlContent += `<span style="animation-delay: ${delay}s">${content}</span>`;
