@@ -51,23 +51,24 @@ function animateMarquee() {
 }
 
 // ----------------------------------------------------
-// Lógica do Rastro Mágico do Cursor
+// Lógica do Rastro Mágico do Cursor (CORRIGIDA)
 // ----------------------------------------------------
 
 const cursorTrail = document.getElementById('cursor-trail');
-const maxParticles = 30; // Limite de partículas
-let particles = [];
+// Não precisamos mais do array 'particles' se gerarmos de forma espaçada
+let lastSparkleTime = 0;
+const sparkleInterval = 50; // Cria uma nova partícula a cada 50ms (mais espaçado e performático)
 
 // Função que cria e anima uma nova partícula
 function createSparkle(x, y) {
     const sparkle = document.createElement('div');
     sparkle.classList.add('sparkle');
     
+    // Posição inicial
     sparkle.style.left = `${x}px`;
     sparkle.style.top = `${y}px`;
     
     cursorTrail.appendChild(sparkle);
-    particles.push(sparkle);
 
     // Anima a partícula
     setTimeout(() => {
@@ -79,20 +80,22 @@ function createSparkle(x, y) {
         
     }, 10);
 
-    // Remove a partícula após 1 segundo (tempo da transição CSS)
+    // Remove a partícula após 1 segundo
     setTimeout(() => {
         if (sparkle.parentNode) {
             sparkle.parentNode.removeChild(sparkle);
-            particles = particles.filter(p => p !== sparkle);
         }
     }, 1000); 
 }
 
 // Ouve o movimento do mouse
 document.addEventListener('mousemove', (e) => {
-    if (particles.length < maxParticles) {
-        // Cria a partícula na posição atual do cursor
+    const currentTime = Date.now();
+    
+    // Verifica se já passou tempo suficiente desde a última partícula
+    if (currentTime - lastSparkleTime > sparkleInterval) {
         createSparkle(e.clientX, e.clientY);
+        lastSparkleTime = currentTime;
     }
 });
 
