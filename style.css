@@ -41,7 +41,7 @@ body {
     border-radius: 50%;
     background-color: var(--pastel-pink); 
     box-shadow: 0 0 5px var(--cloud-white), 0 0 10px var(--pastel-pink); 
-    opacity: 0;
+    opacity: 0; /* Opacidade inicial em 0 (será forçada para 1 pelo JS) */
     transition: transform 1s ease-out, opacity 1s ease-out;
 }
 
@@ -88,10 +88,7 @@ body {
     height: 60vh; 
     bottom: 0; 
     right: 5vw; 
-    
-    /* Levemente transparente (95% opaca) */
     opacity: 0.95; 
-    
     animation: gentle-float 15s ease-in-out infinite alternate;
 }
 
@@ -100,7 +97,6 @@ body {
         transform: translateY(0) rotate(-0.5deg);
     }
     100% {
-        /* Flutuação sutil de 15px */
         transform: translateY(-15px) rotate(0.5deg); 
     }
 }
@@ -110,34 +106,26 @@ body {
     position: fixed;
     top: calc(50vh - 175px); 
     left: calc(50vw - 45vw + 10px); 
-    
-    /* Tamanho aumentado */
     width: 200px; 
     height: auto;
-    
     z-index: 15; 
-    
-    /* Propriedade para suavizar a transição de opacidade */
     transition: opacity 1s ease-in-out; 
-    
     transform: rotate(-10deg); 
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-    
-    /* Animação de sumiço/reaparecimento */
     animation: cheshire-magic 20s ease-in-out infinite; 
 }
 
 @keyframes cheshire-magic {
     0%, 75% {
-        opacity: 1; /* Visível */
+        opacity: 1; 
         transform: scaleX(1) rotate(-10deg);
     }
     80% {
-        opacity: 0.0; /* Desaparece */
+        opacity: 0.0; 
         transform: scaleX(0.98) rotate(-10deg);
     }
     100% {
-        opacity: 1; /* Reaparece */
+        opacity: 1; 
         transform: scaleX(1) rotate(-10deg);
     }
 }
@@ -164,7 +152,6 @@ body {
     position: relative; 
     z-index: 10; 
     
-    /* APLICA O BALANÇO SUAVE */
     animation: gentle-swing 20s ease-in-out infinite alternate;
 }
 
@@ -209,7 +196,10 @@ body {
     display: inline-block;
     position: relative; 
     cursor: pointer;
-    transition: color 0.5s ease-in-out, text-shadow 0.5s ease-in-out;
+    
+    /* Inclui transição para o efeito de clique */
+    transition: color 0.5s ease-in-out, text-shadow 0.5s ease-in-out, transform 0.4s ease-in-out; 
+    
     animation-name: wave-text;
     animation-duration: 6s;
     animation-iteration-count: infinite;
