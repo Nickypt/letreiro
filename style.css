@@ -42,7 +42,6 @@ body {
     background-color: var(--pastel-pink); 
     box-shadow: 0 0 5px var(--cloud-white), 0 0 10px var(--pastel-pink); 
     opacity: 0;
-    
     transition: transform 1s ease-out, opacity 1s ease-out;
 }
 
@@ -72,7 +71,7 @@ body {
     100% { background-position: 1000px 1000px; }
 }
 
-/* 🖼️ Estilo e Animação da Alice */
+/* 🖼️ Estilo e Animação da Alice (Flutuação Suave e Sutilmente Transparente) */
 .background-alice {
     position: fixed; 
     bottom: 0;
@@ -90,6 +89,7 @@ body {
     bottom: 0; 
     right: 5vw; 
     
+    /* Levemente transparente (95% opaca) */
     opacity: 0.95; 
     
     animation: gentle-float 15s ease-in-out infinite alternate;
@@ -100,46 +100,55 @@ body {
         transform: translateY(0) rotate(-0.5deg);
     }
     100% {
+        /* Flutuação sutil de 15px */
         transform: translateY(-15px) rotate(0.5deg); 
     }
 }
 
-/* 🐈 Gato de Cheshire (AUMENTADO) */
+/* 🐈 Gato de Cheshire (Aumento e Efeito Desaparecer) */
 #cheshireCat {
     position: fixed;
-    /* Posição ajustada para compensar o aumento de tamanho */
     top: calc(50vh - 175px); 
     left: calc(50vw - 45vw + 10px); 
     
-    /* ✅ NOVO TAMANHO */
+    /* Tamanho aumentado */
     width: 200px; 
     height: auto;
     
     z-index: 15; 
     
+    /* Propriedade para suavizar a transição de opacidade */
+    transition: opacity 1s ease-in-out; 
+    
     transform: rotate(-10deg); 
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
     
-    animation: cheshire-blink 12s ease-in-out infinite; 
+    /* Animação de sumiço/reaparecimento */
+    animation: cheshire-magic 20s ease-in-out infinite; 
 }
 
-@keyframes cheshire-blink {
-    0%, 20%, 80%, 100% {
-        opacity: 1;
-    }
-    30%, 70% {
-        opacity: 0.95;
-    }
-    40% {
+@keyframes cheshire-magic {
+    0%, 75% {
+        opacity: 1; /* Visível */
         transform: scaleX(1) rotate(-10deg);
     }
-    60% {
+    80% {
+        opacity: 0.0; /* Desaparece */
         transform: scaleX(0.98) rotate(-10deg);
+    }
+    100% {
+        opacity: 1; /* Reaparece */
+        transform: scaleX(1) rotate(-10deg);
     }
 }
 
+/* 🖱️ ANIMAÇÃO: Balanço Suave do Letreiro */
+@keyframes gentle-swing {
+    0% { transform: rotate(0.5deg); }
+    100% { transform: rotate(-0.5deg); }
+}
 
-/* Contêiner da Tela (Screen) */
+/* Contêiner da Tela (Screen) - COM BALANÇO */
 .screen {
     width: 90vw;
     height: 120px;
@@ -154,6 +163,9 @@ body {
     overflow: hidden; 
     position: relative; 
     z-index: 10; 
+    
+    /* APLICA O BALANÇO SUAVE */
+    animation: gentle-swing 20s ease-in-out infinite alternate;
 }
 
 /* Estilo do Letreiro */
@@ -197,9 +209,7 @@ body {
     display: inline-block;
     position: relative; 
     cursor: pointer;
-    
     transition: color 0.5s ease-in-out, text-shadow 0.5s ease-in-out;
-    
     animation-name: wave-text;
     animation-duration: 6s;
     animation-iteration-count: infinite;
