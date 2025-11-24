@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Letreiro Alice no País das Maravilhas</title>
-        <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Incluindo a fonte Great Vibes -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     
-                <style>
+    <!-- ================================================================= -->
+    <!-- INÍCIO DO CSS (Estilização e Animações) -->
+    <!-- ================================================================= -->
+    <style>
         /* Paleta de Cores Pastéis (DIA) */
         :root {
             --pastel-pink: #FFD1DC;
@@ -184,8 +188,8 @@
             opacity: 0.95; 
             animation: gentle-float 15s ease-in-out infinite alternate;
             content: url('pngegg.png');
-            /* REMOVIDO: border-radius: 10px; */
-            /* REMOVIDO: box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         @keyframes gentle-float {
@@ -196,9 +200,9 @@
         /* 🐈 Gato de Cheshire (Adicionado cursor para indicar interatividade) */
         #cheshireCat {
             position: fixed;
-            top: calc(50vh - 250px); /* ALTERADO: Mover para cima da caixa */
-            left: calc(50vw - 250px); /* ALTERADO: Ajuste de posição */
-            width: 250px; /* ALTERADO: Aumentar o tamanho */
+            top: calc(50vh - 185px); 
+            left: calc(50vw - 45vw + 10px); 
+            width: 200px; 
             height: auto;
             z-index: 15; 
             transition: opacity 1s ease-in-out, transform 0.5s; 
@@ -399,9 +403,8 @@
 
             /* 🐈 Gato */
             #cheshireCat {
-                width: 180px; /* Ajuste para manter a proporção com o aumento */
-                top: calc(50vh - 180px); /* Ajuste de posição */
-                left: calc(50vw - 35vw + 10px); /* Mantido na esquerda, mas ajustado */
+                width: 150px; 
+                top: calc(50vh - 150px); 
             }
 
             /* 🖱️ Balanço do Letreiro (Mais sutil) */
@@ -432,9 +435,8 @@
 
             /* 🐈 Gato de Cheshire */
             #cheshireCat {
-                width: 120px; /* Ajuste para mobile */
-                top: calc(50vh - 150px); /* Ajuste de posição para mobile */
-                left: calc(50vw - 45vw + 10px);
+                width: 100px; 
+                top: calc(50vh - 120px); 
             }
             
             /* 💫 Rastro do Cursor (Desativado em mobile para performance) */
@@ -443,33 +445,51 @@
             }
         }
     </style>
-        <style id="dynamicStyles"></style>
-            </head>
+    <!-- Folha de estilo dedicada para regras dinâmicas (manipuladas pelo JS) -->
+    <style id="dynamicStyles"></style>
+    <!-- ================================================================= -->
+    <!-- FIM DO CSS -->
+    <!-- ================================================================= -->
+</head>
 <body id="appBody">
     
-                
-        <div id="cloud-layer"></div>
+    <!-- ================================================================= -->
+    <!-- INÍCIO DO HTML (Estrutura e Conteúdo) -->
+    <!-- ================================================================= -->
     
-        <div id="floating-suits-container"></div>
+    <!-- Camada de Nuvens Suaves (CSS) -->
+    <div id="cloud-layer"></div>
     
-        <div id="cursor-trail"></div> 
+    <!-- Camada de Naipes Flutuantes (Gerada por JS) -->
+    <div id="floating-suits-container"></div>
     
-        <div class="magic-particles"></div>
+    <!-- Rastro de partículas (gerado por JS) -->
+    <div id="cursor-trail"></div> 
+    
+    <!-- Efeito de partículas de fundo (CSS) -->
+    <div class="magic-particles"></div>
 
-        <div class="background-alice">
+    <!-- Imagens (Usando Placeholders pois os arquivos locais não estão disponíveis) -->
+    <div class="background-alice">
         <img src="pngegg.png" alt="Alice no País das Maravilhas" id="aliceImg">
     </div>
 
     <img src="pngegg (1).png" alt="Gato de Cheshire" id="cheshireCat">
 
-        <div class="screen">
-                <div class="marquee-text" id="marqueeText" data-text="Se você não sabe para onde ir, qualquer caminho serve.">
+    <!-- Contêiner do Letreiro -->
+    <div class="screen">
+        <!-- O texto será injetado aqui -->
+        <div class="marquee-text" id="marqueeText" data-text="Se você não sabe para onde ir, qualquer caminho serve.">
         </div>
     </div>
     
     <p style="position: fixed; bottom: 5px; color: rgba(0,0,0,0.5); z-index: 10;">Clique em qualquer lugar do fundo para alternar Dia/Noite! Clique no letreiro para um efeito de arco-íris!</p>
     
-                <script>
+    <!-- ================================================================= -->
+    <!-- FIM DO HTML -->
+    <!-- ================================================================= -->
+
+    <script>
         // =================================================================
         // INÍCIO DO JAVASCRIPT (Lógica e Interatividade)
         // =================================================================
@@ -509,12 +529,14 @@
                 const content = char === ' ' ? '&nbsp;' : char;
                 const className = char === ' ' ? 'space' : '';
                 
+                // Cria um span para cada caractere para a animação de onda
+                const span = document.createElement('span');
+                
                 // CORREÇÃO: Adiciona a classe somente se não for vazia, resolvendo o erro SyntaxError
                 if (className) {
                     span.classList.add(className);
                 }
                 
-                const span = document.createElement('span');
                 span.innerHTML = content;
                 span.style.animationDelay = `${delay}s`;
                 
