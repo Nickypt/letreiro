@@ -4,26 +4,790 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Letreiro Alice no País das Maravilhas</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Incluindo a fonte Great Vibes -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-</head>
-<body>
+    
+    <!-- ================================================================= -->
+    <!-- INÍCIO DO CSS (Estilização e Animações) -->
+    <!-- ================================================================= -->
+    <style>
+        /* Paleta de Cores Pastéis (DIA) */
+        :root {
+            --pastel-pink: #FFD1DC;
+            --light-rose: #FADADD;
+            --sky-light: #B0E0E6;
+            --cloud-white: #F0FFFF;
+            --text-color-blue: #6495ED;
+            --suit-red: #DC143C;
+            --suit-black: #333333;
+            --background-start: var(--sky-light);
+            --background-middle: var(--light-rose);
+            --background-end: var(--cloud-white);
+            --cloud-color-start: rgba(255, 209, 220, 0.4);
+            --sparkle-color: #FFCC00;
+        }
 
+        /* 🌙 Paleta de Cores Escuras (NOITE) */
+        body.dark-theme {
+            /* Degradê de Noite Mágica (Roxo, Azul Escuro) */
+            --background-start: #3A0050; 
+            --background-middle: #1B0032;
+            --background-end: #0D0D1B;
+            --cloud-color-start: rgba(150, 0, 200, 0.3); /* Nuvem/Névoa roxa */
+            --text-color-blue: #ADD8E6; /* Texto mais claro */
+            --suit-red: #FF69B4; /* Rosa choque */
+            --suit-black: #FFFFFF; /* Naipes brancos */
+            --pastel-pink: #FF69B4; /* Bordas mais vivas */
+            --cloud-white: #1B0032; /* Fundo do letreiro escuro */
+            --sparkle-color: #A020F0; /* Roxo vibrante para brilhos */
+        }
+
+        /* Base e Fundo (Degradê de Céu) */
+        body {
+            margin: 0;
+            font-family: 'Great Vibes', cursive, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* Degradê usando variáveis */
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-middle) 50%, var(--background-end) 100%);
+            overflow: hidden;
+            
+            cursor: pointer; 
+            transition: background 2s ease-in-out; /* Transição suave entre dia/noite */
+        }
+
+        /* ☁️ Camada de Nuvens e Neblina (efeito do País das Maravilhas) */
+        #cloud-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1; 
+            pointer-events: none;
+            
+            background: 
+                radial-gradient(circle at 15% 15%, var(--cloud-color-start) 0%, transparent 40%), 
+                radial-gradient(circle at 60% 40%, rgba(176, 224, 230, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(240, 255, 255, 0.4) 0%, transparent 40%); 
+                
+            background-size: 200vw 200vh; 
+            background-repeat: no-repeat;
+            opacity: 0.7; 
+            animation: slow-cloud-move 100s linear infinite alternate;
+            filter: blur(10px); 
+            transition: background 2s ease-in-out;
+        }
+
+        @keyframes slow-cloud-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 100vw 100vh; }
+        }
+
+        /* ♠️ Camada de Elementos Flutuantes (Naipes) - Definida para o JS */
+        .floating-suit {
+            position: fixed;
+            bottom: -50px; 
+            width: 40px;
+            height: 40px;
+            font-size: 40px;
+            line-height: 1;
+            opacity: 0;
+            animation: float-up var(--duration) linear infinite; 
+            z-index: 1;
+            pointer-events: none;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+            will-change: transform, opacity;
+        }
+        
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            5% { opacity: 0.8; }
+            95% { opacity: 0.2; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* 💫 Rastro do Cursor (Brilhos Extravagantes) */
+        #cursor-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20; 
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 12px; 
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--sparkle-color); 
+            box-shadow: 
+                0 0 8px #FFFFFF, 
+                0 0 16px var(--sparkle-color), 
+                0 0 24px var(--sparkle-color); 
+            opacity: 0; 
+            transition: transform 1.5s ease-out, opacity 1.5s ease-out; 
+        }
+        
+        /* 🌟 Efeito de Partículas Mágicas (Estrelinhas) - Mais visível à noite */
+        .magic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5; /* Opacidade padrão */
+            transition: opacity 2s ease-in-out;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+                radial-gradient(circle at 30% 60%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+                radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.5) 1px, transparent 0),
+                radial-gradient(circle at 90% 40%, rgba(255, 255, 255, 0.5) 1px, transparent 0);
+            
+            background-repeat: repeat;
+            background-size: 1000px 1000px;
+            animation: move-particles 60s linear infinite;
+        }
+
+        /* Estrelas mais visíveis no modo noturno */
+        body.dark-theme .magic-particles {
+            opacity: 1; 
+        }
+
+        @keyframes move-particles {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
+        }
+
+        /* 🖼️ Estilo e Animação da Alice (Flutuação Suave) */
+        .background-alice {
+            position: fixed; 
+            bottom: 0;
+            left: 0;
+            width: 100vw; 
+            height: 80vh; 
+            overflow: hidden;
+            z-index: 12; 
+            pointer-events: none;
+        }
+
+        #aliceImg {
+            position: absolute;
+            height: 60vh; 
+            bottom: 0; 
+            right: 5vw; 
+            opacity: 0.95; 
+            animation: gentle-float 15s ease-in-out infinite alternate;
+            content: url('https://placehold.co/300x400/B0E0E6/6495ED?text=Alice+Placeholder');
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes gentle-float {
+            0% { transform: translateY(0) rotate(-0.5deg); }
+            100% { transform: translateY(-15px) rotate(0.5deg); }
+        }
+
+        /* 🐈 Gato de Cheshire (Adicionado cursor para indicar interatividade) */
+        #cheshireCat {
+            position: fixed;
+            top: calc(50vh - 185px); 
+            left: calc(50vw - 45vw + 10px); 
+            width: 200px; 
+            height: auto;
+            z-index: 15; 
+            transition: opacity 1s ease-in-out, transform 0.5s; 
+            transform: rotate(-10deg); 
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+            animation: cheshire-magic 20s ease-in-out infinite; 
+            content: url('https://placehold.co/200x150/FFD1DC/333333?text=Cheshire+Cat+:D');
+            border-radius: 10px;
+            cursor: pointer; /* Indica que é clicável */
+        }
+        
+        /* Gato escondido */
+        #cheshireCat.hidden {
+            opacity: 0 !important;
+            transform: scale(0.5) rotate(-10deg);
+        }
+
+        @keyframes cheshire-magic {
+            0%, 75% { opacity: 1; transform: scaleX(1) rotate(-10deg); }
+            80% { opacity: 0.0; transform: scaleX(0.98) rotate(-10deg); }
+            100% { opacity: 1; transform: scaleX(1) rotate(-10deg); }
+        }
+
+        /* 🖱️ ANIMAÇÃO: Balanço Suave do Letreiro */
+        @keyframes gentle-swing {
+            0% { transform: rotate(0.5deg); }
+            100% { transform: rotate(-0.5deg); }
+        }
+        
+        /* Contêiner da Tela (Screen) - COM BALANÇO */
+        .screen {
+            width: 90vw;
+            max-width: 800px; 
+            height: 120px;
+            margin-top: 20px; 
+            
+            border: 8px solid var(--pastel-pink); 
+            border-style: solid; 
+            border-radius: 15px; 
+            background-color: var(--cloud-white); 
+            box-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.9) inset, 
+                0 0 10px rgba(0, 0, 0, 0.15);
+            overflow: hidden; 
+            position: relative; 
+            z-index: 10; 
+            
+            animation: gentle-swing 20s ease-in-out infinite alternate;
+            transition: background-color 2s ease-in-out, border-color 2s ease-in-out;
+        }
+
+        /* Estilo do Letreiro */
+        .marquee-text {
+            display: flex;
+            align-items: center;
+            
+            font-size: 52px; 
+            font-weight: 400; 
+            color: var(--text-color-blue); 
+            text-shadow: 
+                0 0 5px var(--cloud-white), 
+                0 0 10px var(--pastel-pink), 
+                1px 1px 3px rgba(0, 0, 0, 0.1); 
+
+            white-space: nowrap; 
+            
+            position: absolute;
+            left: 0; 
+            top: 0; 
+            height: 100%; 
+            z-index: 5;
+            will-change: transform; 
+            cursor: pointer; 
+            transition: color 2s ease-in-out;
+        }
+
+        /* ✨ Efeito de Onda Suave no Texto */
+        @keyframes wave-text {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .marquee-text span {
+            margin-right: 0.1em;
+            display: inline-block;
+            position: relative; 
+            cursor: pointer;
+            
+            transition: color 0.5s ease-in-out, text-shadow 0.5s ease-in-out, transform 0.4s ease-in-out; 
+            
+            animation-name: wave-text;
+            animation-duration: 6s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+
+        /* Efeito de Mudança de Cor ao Passar o Mouse/Dedo */
+        .marquee-text span:hover {
+            color: var(--pastel-pink); 
+            text-shadow: 
+                0 0 10px var(--cloud-white), 
+                0 0 20px var(--pastel-pink);
+        }
+        
+        /* Ajuste do espaço em branco */
+        .marquee-text span.space {
+            width: 1em; 
+            animation-name: none;
+        }
+
+
+        /* ✨ Detalhes Alice: Quatro Naipes de Cartas */
+        @keyframes pulse {
+            0% { 
+                opacity: 0.8; 
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+            50% { 
+                opacity: 1; 
+                text-shadow: 0 0 10px var(--pastel-pink); 
+            }
+            100% { 
+                opacity: 0.8; 
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .screen::before {
+            content: "♥ ♦";
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            font-size: 28px;
+            color: var(--suit-red);
+            letter-spacing: 10px; 
+            z-index: 10; 
+            animation: pulse 4s infinite alternate;
+            transition: color 2s ease-in-out;
+        }
+
+        .screen::after {
+            content: "♣ ♠"; 
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 28px;
+            color: var(--suit-black);
+            letter-spacing: 10px; 
+            z-index: 10;
+            animation: pulse 4s infinite alternate 0.5s; 
+            transition: color 2s ease-in-out;
+        }
+
+        .screen .marquee-text::before,
+        .screen .marquee-text::after {
+            animation: pulse 4s infinite alternate;
+        }
+
+        .screen .marquee-text::before {
+            content: "♦";
+            position: absolute;
+            bottom: -15px;
+            left: 5px;
+            font-size: 20px;
+            color: var(--suit-red);
+            opacity: 0.7;
+            transition: color 2s ease-in-out;
+        }
+
+        .screen .marquee-text::after {
+            content: "♣";
+            position: absolute;
+            bottom: -15px;
+            right: 5px;
+            font-size: 20px;
+            color: var(--suit-black);
+            opacity: 0.7;
+            transition: color 2s ease-in-out;
+        }
+
+
+        /* ================================================= */
+        /* 📱 MEDIA QUERIES PARA RESPONSIVIDADE (MOBILE FIRST) */
+        /* ================================================= */
+
+        /* --- AJUSTES PARA TABLETS E TELAS MÉDIAS (MAX-WIDTH: 992px) --- */
+        @media screen and (max-width: 992px) {
+            /* 📜 Letreiro */
+            .marquee-text {
+                font-size: 40px; 
+            }
+            
+            /* 🖼️ Alice */
+            #aliceImg {
+                height: 50vh; 
+                right: 0vw; 
+            }
+
+            /* 🐈 Gato */
+            #cheshireCat {
+                width: 150px; 
+                top: calc(50vh - 150px); 
+            }
+
+            /* 🖱️ Balanço do Letreiro (Mais sutil) */
+            @keyframes gentle-swing {
+                0% { transform: rotate(0.2deg); }
+                100% { transform: rotate(-0.2deg); }
+            }
+        }
+
+        /* --- AJUSTES PARA CELULARES (MAX-WIDTH: 600px) --- */
+        @media screen and (max-width: 600px) {
+            
+            /* 📜 Letreiro */
+            .screen {
+                height: 90px;
+                width: 95vw;
+            }
+            
+            .marquee-text {
+                font-size: 30px; 
+            }
+            
+            /* 🖼️ Alice */
+            #aliceImg {
+                height: 40vh; 
+                right: -5vw;
+            }
+
+            /* 🐈 Gato de Cheshire */
+            #cheshireCat {
+                width: 100px; 
+                top: calc(50vh - 120px); 
+            }
+            
+            /* 💫 Rastro do Cursor (Desativado em mobile para performance) */
+            #cursor-trail {
+                display: none;
+            }
+        }
+    </style>
+    <!-- Folha de estilo dedicada para regras dinâmicas (manipuladas pelo JS) -->
+    <style id="dynamicStyles"></style>
+    <!-- ================================================================= -->
+    <!-- FIM DO CSS -->
+    <!-- ================================================================= -->
+</head>
+<body id="appBody">
+    
+    <!-- ================================================================= -->
+    <!-- INÍCIO DO HTML (Estrutura e Conteúdo) -->
+    <!-- ================================================================= -->
+    
+    <!-- Camada de Nuvens Suaves (CSS) -->
+    <div id="cloud-layer"></div>
+    
+    <!-- Camada de Naipes Flutuantes (Gerada por JS) -->
+    <div id="floating-suits-container"></div>
+    
+    <!-- Rastro de partículas (gerado por JS) -->
     <div id="cursor-trail"></div> 
     
+    <!-- Efeito de partículas de fundo (CSS) -->
     <div class="magic-particles"></div>
 
+    <!-- Imagens (Usando Placeholders pois os arquivos locais não estão disponíveis) -->
     <div class="background-alice">
         <img src="pngegg.png" alt="Alice no País das Maravilhas" id="aliceImg">
     </div>
 
     <img src="pngegg (1).png" alt="Gato de Cheshire" id="cheshireCat">
 
+    <!-- Contêiner do Letreiro -->
     <div class="screen">
+        <!-- O texto será injetado aqui -->
         <div class="marquee-text" id="marqueeText" data-text="Se você não sabe para onde ir, qualquer caminho serve.">
-            </div>
+        </div>
     </div>
+    
+    <p style="position: fixed; bottom: 5px; color: rgba(0,0,0,0.5); z-index: 10;">Clique em qualquer lugar do fundo para alternar Dia/Noite! Clique no letreiro para um efeito de arco-íris!</p>
+    
+    <!-- ================================================================= -->
+    <!-- FIM DO HTML -->
+    <!-- ================================================================= -->
 
-    <script src="script.js"></script>
+    <script>
+        // =================================================================
+        // INÍCIO DO JAVASCRIPT (Lógica e Interatividade)
+        // =================================================================
+
+        // === VARIÁVEIS GLOBAIS ===
+        const marqueeText = document.getElementById('marqueeText');
+        const screen = document.querySelector('.screen');
+        const appBody = document.getElementById('appBody');
+        const cheshireCat = document.getElementById('cheshireCat');
+        const dynamicStyleSheet = document.getElementById('dynamicStyles').sheet;
+
+        // Array de cores pastel para o efeito arco-íris
+        const pastelColors = [
+            '#FFD1DC', '#FADADD', '#B0E0E6', '#DCDCDC', 
+            '#6495ED', '#DC143C', '#ADD8E6' 
+        ];
+
+        // Parâmetros da Animação do Letreiro
+        const baseSpeed = 0.6; 
+        const speedVariation = 0.5;
+        let position = 0; 
+        let direction = 1;
+        let isDistorting = false; 
+        let animationFrameId = null; // Para controlar o requestAnimationFrame
+
+        // === 1. Inicializa o Efeito de Onda e Texto (Corrigido para o erro DOMTokenList) ===
+        function initializeTextWave(text) {
+            let delay = 0;
+            
+            // Re-define o atributo data-text com o novo conteúdo para manter o estado
+            marqueeText.setAttribute('data-text', text); 
+
+            // Limpa o conteúdo anterior
+            marqueeText.innerHTML = '';
+            
+            text.split('').forEach(char => {
+                const content = char === ' ' ? '&nbsp;' : char;
+                const className = char === ' ' ? 'space' : '';
+                
+                // Cria um span para cada caractere para a animação de onda
+                const span = document.createElement('span');
+                
+                // CORREÇÃO: Adiciona a classe somente se não for vazia, resolvendo o erro SyntaxError
+                if (className) {
+                    span.classList.add(className);
+                }
+                
+                span.innerHTML = content;
+                span.style.animationDelay = `${delay}s`;
+                
+                // Reaplica a animação de onda padrão (CSS puro)
+                span.style.animation = `wave-text 6s infinite ease-in-out`; 
+
+                marqueeText.appendChild(span);
+                
+                delay += 0.05;
+            });
+
+            // Reseta a posição do letreiro e reinicia a animação se necessário
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            position = 0;
+            direction = 1;
+            animateMarquee();
+        }
+
+        // === 2. Função Principal de Animação (Ida e Volta Horizontal) ===
+        function animateMarquee() {
+            const screenWidth = screen.clientWidth;
+            const textWidth = marqueeText.scrollWidth; 
+            
+            if (textWidth <= screenWidth) {
+                // Centraliza se o texto for menor
+                marqueeText.style.justifyContent = 'center';
+                marqueeText.style.width = '100%';
+                marqueeText.style.position = 'relative';
+                marqueeText.style.transform = 'none';
+                animationFrameId = null;
+                return; 
+            }
+
+            // Garante que o CSS está correto para a animação
+            marqueeText.style.justifyContent = 'flex-start';
+            marqueeText.style.width = 'auto';
+            marqueeText.style.position = 'absolute';
+
+            const maxPosition = screenWidth - textWidth; 
+            const variableSpeed = baseSpeed + (Math.sin(Date.now() / 1000) * speedVariation);
+            
+            position += variableSpeed * direction;
+
+            // Inverte a direção ao atingir as bordas
+            if (direction === -1) { 
+                if (position <= maxPosition) {
+                    position = maxPosition; 
+                    direction = 1; 
+                }
+            } else {
+                if (position >= 0) {
+                    position = 0; 
+                    direction = -1; 
+                }
+            }
+
+            marqueeText.style.transform = `translateX(${position}px)`; 
+            animationFrameId = requestAnimationFrame(animateMarquee);
+        }
+
+        // ----------------------------------------------------
+        // 3. Alternar Tema Dia/Noite (Ação no Fundo)
+        // ----------------------------------------------------
+        function toggleTheme() {
+            appBody.classList.toggle('dark-theme');
+        }
+        
+        // Listener para alternar o tema (exceto se clicar no letreiro)
+        appBody.addEventListener('click', (event) => {
+            // Verifica se o clique não foi no letreiro
+            if (!screen.contains(event.target)) {
+                toggleTheme();
+            }
+        });
+
+        // ----------------------------------------------------
+        // 4. Gato Desaparece e Volta (Efeito Cheshire)
+        // ----------------------------------------------------
+        function hideCat() {
+            if (cheshireCat.classList.contains('hidden')) return; 
+
+            cheshireCat.classList.add('hidden');
+            
+            // Volta a mostrar após 5 segundos
+            setTimeout(() => {
+                cheshireCat.classList.remove('hidden');
+            }, 5000); 
+        }
+
+        cheshireCat.addEventListener('click', hideCat);
+
+        // ----------------------------------------------------
+        // 5. Efeito Tipográfico Arco-íris Pastel ao Clicar
+        // ----------------------------------------------------
+        function distortText() {
+            if (isDistorting) return; 
+            isDistorting = true;
+            
+            const letters = marqueeText.querySelectorAll('span');
+            const animationDuration = 3000; 
+            
+            // Adiciona keyframe de pop-up temporário
+            if (!Array.from(dynamicStyleSheet.cssRules).some(rule => rule.name === `temporary-transform`)) {
+                 dynamicStyleSheet.insertRule(`
+                    @keyframes temporary-transform {
+                        0% { transform: scale(1); }
+                        10% { transform: scale(1.1); }
+                        100% { transform: scale(1); }
+                    }
+                `, dynamicStyleSheet.cssRules.length);
+            }
+
+            letters.forEach((span, index) => {
+                const color = pastelColors[index % pastelColors.length];
+                const delay = index * 0.03; 
+                
+                // Aplica a animação no CSS
+                span.style.animation = `rainbow-wave-${index} 0.5s infinite alternate, temporary-transform 3s forwards`;
+                span.style.animationDelay = `${delay}s, 0s`; 
+                
+                // Define keyframes dinâmicos para cada letra para o arco-íris
+                if (!Array.from(dynamicStyleSheet.cssRules).some(rule => rule.name === `rainbow-wave-${index}`)) {
+                    dynamicStyleSheet.insertRule(`
+                        @keyframes rainbow-wave-${index} {
+                            0% { 
+                                transform: translateY(0px) scale(1);
+                                color: ${color}; 
+                                text-shadow: 0 0 10px ${color};
+                            }
+                            50% { 
+                                transform: translateY(-12px) scale(1.05);
+                                color: ${pastelColors[(index + 1) % pastelColors.length]}; 
+                                text-shadow: 0 0 15px ${pastelColors[(index + 1) % pastelColors.length]};
+                            }
+                            100% {
+                                transform: translateY(0px) scale(1);
+                                color: ${color}; 
+                                text-shadow: 0 0 10px ${color};
+                            }
+                        }
+                    `, dynamicStyleSheet.cssRules.length);
+                }
+            });
+
+            // Restaura o estado original após a duração total
+            setTimeout(() => {
+                letters.forEach(span => {
+                    span.style.animation = ''; // Remove as animações dinâmicas
+                    span.style.transform = '';
+                    // Re-aplica a animação de onda padrão (CSS puro)
+                    const initialDelay = parseFloat(span.style.animationDelay) || 0;
+                    span.style.animation = `wave-text 6s infinite ease-in-out`; 
+                    span.style.animationDelay = `${initialDelay}s`;
+                });
+                isDistorting = false;
+            }, animationDuration);
+        }
+
+        screen.addEventListener('click', distortText);
+
+
+        // ----------------------------------------------------
+        // 6. Lógica do Rastro Mágico do Cursor
+        // ----------------------------------------------------
+        const cursorTrail = document.getElementById('cursor-trail');
+        let lastSparkleTime = 0;
+        const sparkleInterval = 20; 
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            
+            sparkle.style.left = `${x}px`;
+            sparkle.style.top = `${y}px`;
+            
+            cursorTrail.appendChild(sparkle);
+
+            requestAnimationFrame(() => {
+                sparkle.style.opacity = Math.random() * 0.6 + 0.4;
+                const endX = x + (Math.random() - 0.5) * 100; 
+                const endY = y + (Math.random() - 1) * 100 - 50; 
+
+                sparkle.style.transform = `translate(${endX - x}px, ${endY - y}px) scale(0)`;
+            });
+
+            setTimeout(() => {
+                if (sparkle.parentNode) {
+                    sparkle.parentNode.removeChild(sparkle);
+                }
+            }, 1500); 
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const currentTime = Date.now();
+            
+            if (currentTime - lastSparkleTime > sparkleInterval) {
+                createSparkle(e.clientX, e.clientY);
+                lastSparkleTime = currentTime;
+            }
+        });
+
+        // Oculta o rastro em dispositivos touch
+        if ('ontouchstart' in window) {
+            cursorTrail.style.display = 'none';
+        }
+        
+        // ----------------------------------------------------
+        // 7. Lógica de Geração de Naipes Flutuantes
+        // ----------------------------------------------------
+        const floatingSuitsContainer = document.getElementById('floating-suits-container');
+        const suits = ['♥', '♦', '♣', '♠'];
+        const suitColors = {
+            '♥': 'var(--suit-red)', 
+            '♦': 'var(--suit-red)',
+            '♣': 'var(--suit-black)',
+            '♠': 'var(--suit-black)'
+        };
+        
+        // Gera 15 naipes flutuantes
+        for (let i = 0; i < 15; i++) {
+            const suitElement = document.createElement('div');
+            suitElement.classList.add('floating-suit');
+            
+            const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+            const randomSize = Math.floor(Math.random() * (40 - 20) + 20); 
+            const randomDuration = Math.floor(Math.random() * (25 - 15) + 15); 
+            const randomDelay = Math.random() * -randomDuration; 
+            const randomLeft = Math.random() * 100; 
+
+            suitElement.innerHTML = randomSuit;
+            suitElement.style.color = suitColors[randomSuit];
+            suitElement.style.fontSize = `${randomSize}px`;
+            suitElement.style.left = `${randomLeft}vw`;
+            suitElement.style.setProperty('--duration', `${randomDuration}s`); 
+            suitElement.style.animationDelay = `${randomDelay}s`;
+
+            floatingSuitsContainer.appendChild(suitElement);
+        }
+
+
+        // === Inicialização do Projeto (chamado ao carregar a página) ===
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialText = marqueeText.getAttribute('data-text');
+            initializeTextWave(initialText); 
+        });
+        
+        // =================================================================
+        // FIM DO JAVASCRIPT
+        // =================================================================
+    </script>
 </body>
 </html>
